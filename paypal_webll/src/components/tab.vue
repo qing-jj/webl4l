@@ -309,10 +309,10 @@
                 alert('rateVersion:' + rateVersion)
                 alert('lastRateVersion:' + lastRateVersion)
                 alert('rateItem:' + rateItem)
-                if (needRate === '1' && lastRateVersion === rateVersion && rateItem){
+                if (needRate === '1' && lastRateVersion !== rateVersion && rateItem){
                     setTimeout(() => {
                         this.rate_flag = true
-                    }, 3000);
+                    }, 1500);
                 } else {
                     this.rate_flag = false
                 }
