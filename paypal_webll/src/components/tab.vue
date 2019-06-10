@@ -269,6 +269,7 @@
                 }
             },
             turnApp(item) {
+                this.rate_flag = false;
                 let bundleId = dsbridge.call('bundleId','1');
                 let href = item.target;
                 let url;
@@ -305,10 +306,6 @@
                 let rateVersion = dsbridge.call('version');
                 let lastRateVersion = localStorage.getItem("rateversion");
                 console.log(needRate, rateVersion, lastRateVersion, rateItem)
-                alert('needRate:' + needRate)
-                alert('rateVersion:' + rateVersion)
-                alert('lastRateVersion:' + lastRateVersion)
-                alert('rateItem:' + rateItem)
                 if (needRate === '1' && lastRateVersion !== rateVersion && rateItem){
                     setTimeout(() => {
                         this.rate_flag = true
@@ -321,8 +318,6 @@
                 userhelper.getreward(item, (res, err) => {  // 400
                     this.loading = 'none';
                     if (err) {
-                        let rateversion = dsbridge.call('version');
-                        localStorage.setItem("rateversion", rateversion)
                         alert(err.errorMessage);
                     } else {
                         alert("success");
@@ -373,17 +368,14 @@
             dsbridge.call("dictionaryWithDictionary", {username:userhelper.logged_in_user.username,userid:userhelper.logged_in_user.pk});
             
             dsbridge.register('postNotification', function (res) {
-                alert('notification:' + res)
                 if (res === 'UIApplicationWillEnterForegroundNotification' || res === 'UIApplicationDidBecomeActiveNotification') {
                     if (this.$store.state.rewardType === 'downloadApp') {
-                        alert('downloadApp back')
                         if (dsbridge.call('available', this.downloadAppPackage)) {
                             this.getRewardServer(this.downloadItem)
                         } else {
                             return
                         }
                     } else if (this.$store.state.rewardType === 'rate') {
-                        alert('rate back')
                         let date = new Date();
                         let s = date.getSeconds();
                         //@TODO ZZJ

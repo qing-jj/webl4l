@@ -141,8 +141,12 @@
             handleTaskRewards(taskRewards) {
                 if (!taskRewards) return;
                 let temp = [];
+                let rateVersion = dsbridge.call('version');
+                let lastRateVersion = localStorage.getItem("rateversion");
                 taskRewards.forEach(value => {
-                    if (value.rewardTypeId === 0 || value.rewardTypeId === 1) {
+                    if (value.rewardTypeId === 0 && lastRateVersion !== rateVersion) {
+                        temp.push(value)
+                    } else if (value.rewardTypeId === 1){
                         temp.push(value)
                     } else if (value.rewardTypeId === 6) {
                         let downloadAppPackage = value.target.slice(value.target.indexOf(';') + 1,value.target.length);
@@ -196,6 +200,9 @@
         },
         mounted() {
             this.refershCoinsData();
+            dsbridge.register('postNotification', (res) => {
+                this.handleTaskRewards(this.$store.state.config.taskRewards)
+            })
         },
         created() {
             this.refershCoinsData();
