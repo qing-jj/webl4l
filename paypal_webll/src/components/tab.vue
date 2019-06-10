@@ -319,6 +319,10 @@
                     this.loading = 'none';
                     if (err) {
                         alert(err.errorMessage);
+                        if (err.errorMessage === 'Duplicate comment on this version') {
+                            let rateversion = dsbridge.call('version');
+                            localStorage.setItem("rateversion", rateversion)
+                        } 
                     } else {
                         alert("success");
                         console.log(res);
